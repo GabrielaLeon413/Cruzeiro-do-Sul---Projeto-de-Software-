@@ -56,3 +56,4 @@ function excluirFornecedor(id) {
 function listarFornecedores() {
   return obterFornecedores();
 }
+// Funções responsáveis pelo gerenciamento e cadastro de fornecedores.
