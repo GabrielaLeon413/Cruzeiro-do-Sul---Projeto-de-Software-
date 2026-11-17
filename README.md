@@ -6,21 +6,21 @@ Repositório acadêmico para versionamento do MVP desenvolvido no curso de Anál
 
 ## Sobre o projeto
 
-**Nome do MVP:** [insira o nome do projeto]
+**Nome do MVP:** [Sistema de Gestão e Controle de Doações]
 
-**Problema que pretende resolver:** [descreva brevemente o problema]
+**Problema que pretende resolver:** [A falta de um sistema centralizado para gerenciar doações pode dificultar o controle de estoque, o registro de fornecedores, o acompanhamento dos produtos recebidos e distribuídos e a organização das informações. Isso pode gerar perdas de produtos, falta de controle e dificuldades na administração dos recursos disponíveis.]
 
-**Público-alvo:** [informe quem utilizará o sistema]
+**Público-alvo:** [Instituições sociais, organizações não governamentais (ONGs), entidades beneficentes e profissionais responsáveis pelo recebimento, armazenamento e distribuição de doações.]
 
 ## Objetivo
 
-[Explique o objetivo principal do software.]
+[Desenvolver um sistema informatizado para facilitar o gerenciamento de doações, permitindo o cadastro de fornecedores, o controle de estoque, o registro de entradas e saídas de produtos e o acompanhamento das informações, contribuindo para uma gestão mais organizada, eficiente e transparente.]
 
 ## Funcionalidades previstas
 
-- [Funcionalidade 1]
-- [Funcionalidade 2]
-- [Funcionalidade 3]
+- [Cadastro de fornecedores e doadores]
+- [Cadastro de doações]
+- [Controle de estoque]
 
 ## Tecnologias
 
