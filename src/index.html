@@ -1,34 +1,564 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Projeto MVP acadêmico — Cruzeiro do Sul">
-  <title>Projeto MVP</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Sistema de Gestão e Controle de Doações">
+  <title>Sistema de Gestão de Doações</title>
+
+  <style>
+    :root {
+      --primary: #245c49;
+      --background: #f4f7f5;
+      --surface: #ffffff;
+      --text: #26352e;
+      --border: #dce5df;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 22px;
+    }
+
+    header h1 {
+      margin: 0 0 5px;
+    }
+
+    .accessibility {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 1rem;
+    }
+
+    .accessibility button {
+      background: white;
+      color: #173e31;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 15px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav button, .primary-button {
+      background: var(--primary);
+      color: white;
+    }
+
+    nav button:hover, .primary-button:hover {
+      opacity: 0.85;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 18px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .card, .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #aebdb3;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    form {
+      max-width: 600px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 11px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: #eaf1ec;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #52645a;
+    }
+
+    .high-contrast {
+      --primary: #000000;
+      --background: #ffffff;
+      --surface: #ffffff;
+      --text: #000000;
+      --border: #000000;
+    }
+
+    .high-contrast button,
+    .high-contrast input,
+    .high-contrast th {
+      border: 2px solid black;
+    }
+
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #e6a700;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 17px;
+      }
+
+      nav button {
+        flex: 1 1 45%;
+      }
+
+      .card, .panel {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <h1>Nome do seu projeto</h1>
-    <p>Uma breve frase explicando o propósito do sistema.</p>
+  <header>
+    <h1>Sistema de Gestão e Controle de Doações</h1>
+    <p>Organização de fornecedores, doações e estoque.</p>
+
+    <div class="accessibility" aria-label="Opções de acessibilidade">
+      <button type="button" onclick="alterarFonte(1)"
+        aria-label="Aumentar tamanho da fonte">A+</button>
+      <button type="button" onclick="alterarFonte(-1)"
+        aria-label="Diminuir tamanho da fonte">A-</button>
+      <button type="button" onclick="alternarContraste()"
+        aria-pressed="false" id="contraste">
+        Alto contraste
+      </button>
+      <button type="button" onclick="fonteNormal()">
+        Restaurar visual
+      </button>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Bem-vindo(a)!</h2>
-      <p>
-        Este é o ponto de partida da interface do seu MVP.
-        Personalize este conteúdo de acordo com a proposta do seu software.
-      </p>
-      <button id="learn-more" type="button">Conhecer o projeto</button>
-      <p id="message" class="message" aria-live="polite"></p>
+  <nav aria-label="Menu principal">
+    <button type="button" onclick="mostrarSecao('inicio')">Início</button>
+    <button type="button" onclick="mostrarSecao('fornecedores')">Fornecedores</button>
+    <button type="button" onclick="mostrarSecao('estoque')">Estoque</button>
+  </nav>
+
+  <main>
+    <section id="inicio" class="section active">
+      <h2>Painel principal</h2>
+      <p>Resumo das informações cadastradas no sistema.</p>
+
+      <div class="cards">
+        <div class="card">
+          Fornecedores cadastrados
+          <strong id="total-fornecedores">0</strong>
+        </div>
+        <div class="card">
+          Produtos no estoque
+          <strong id="total-produtos">0</strong>
+        </div>
+        <div class="card">
+          Quantidade total de itens
+          <strong id="total-itens">0</strong>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Bem-vindo(a)!</h3>
+        <p>
+          Utilize o menu para cadastrar fornecedores e controlar
+          as entradas e saídas de produtos recebidos por doação.
+        </p>
+      </div>
+    </section>
+
+    <section id="fornecedores" class="section">
+      <h2>Cadastro de fornecedores</h2>
+
+      <div class="panel">
+        <form id="form-fornecedor">
+          <label for="nome">Nome do fornecedor *</label>
+          <input id="nome" required maxlength="100">
+
+          <label for="documento">CPF ou CNPJ *</label>
+          <input id="documento" required>
+
+          <label for="telefone">Telefone *</label>
+          <input id="telefone" required>
+
+          <label for="email">E-mail *</label>
+          <input id="email" type="email" required>
+
+          <label for="endereco">Endereço</label>
+          <input id="endereco">
+
+          <br><br>
+          <button class="primary-button" type="submit">
+            Cadastrar fornecedor
+          </button>
+          <p id="mensagem-fornecedor" class="message"
+            role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Fornecedores cadastrados</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Documento</th>
+                <th>Telefone</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="lista-fornecedores"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="estoque" class="section">
+      <h2>Controle de estoque</h2>
+
+      <div class="panel">
+        <h3>Registrar movimentação</h3>
+
+        <form id="form-estoque">
+          <label for="produto">Nome do produto *</label>
+          <input id="produto" required>
+
+          <label for="quantidade">Quantidade *</label>
+          <input id="quantidade" type="number" min="1" step="1" required>
+
+          <br><br>
+          <button class="primary-button" type="submit"
+            id="entrada">Registrar entrada</button>
+          <button type="button" id="saida">Registrar saída</button>
+
+          <p id="mensagem-estoque" class="message"
+            role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Produtos disponíveis</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade disponível</th>
+              </tr>
+            </thead>
+            <tbody id="lista-estoque"></tbody>
+          </table>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer>
     <p>Projeto acadêmico — Análise e Desenvolvimento de Sistemas</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script>
+    const CHAVE_FORNECEDORES = "sistemaDoacoes.fornecedores";
+    const CHAVE_ESTOQUE = "sistemaDoacoes.estoque";
+
+    function lerDados(chave) {
+      try {
+        return JSON.parse(localStorage.getItem(chave) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function salvarDados(chave, dados) {
+      localStorage.setItem(chave, JSON.stringify(dados));
+    }
+
+    function textoSeguro(valor) {
+      return String(valor).replace(/[&<>"']/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[caractere]);
+    }
+
+    function mostrarSecao(id) {
+      document.querySelectorAll(".section").forEach(secao => {
+        secao.classList.remove("active");
+      });
+
+      document.getElementById(id).classList.add("active");
+      atualizarPainel();
+    }
+
+    function alterarFonte(valor) {
+      const atual = Number(
+        getComputedStyle(document.body).fontSize.replace("px", "")
+      );
+      const novo = Math.min(24, Math.max(12, atual + valor * 2));
+      document.body.style.fontSize = novo + "px";
+    }
+
+    function alternarContraste() {
+      const ativo = document.body.classList.toggle("high-contrast");
+      document.getElementById("contraste")
+        .setAttribute("aria-pressed", String(ativo));
+    }
+
+    function fonteNormal() {
+      document.body.style.fontSize = "16px";
+      document.body.classList.remove("high-contrast");
+      document.getElementById("contraste")
+        .setAttribute("aria-pressed", "false");
+    }
+
+    function listarFornecedores() {
+      const fornecedores = lerDados(CHAVE_FORNECEDORES);
+      const lista = document.getElementById("lista-fornecedores");
+
+      lista.innerHTML = fornecedores.map(f => `
+        <tr>
+          <td>${textoSeguro(f.nome)}</td>
+          <td>${textoSeguro(f.documento)}</td>
+          <td>${textoSeguro(f.telefone)}</td>
+          <td>
+            <button type="button"
+              onclick="excluirFornecedor('${textoSeguro(f.id)}')">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    document.getElementById("form-fornecedor")
+      .addEventListener("submit", function(evento) {
+        evento.preventDefault();
+
+        const dados = {
+          nome: document.getElementById("nome").value.trim(),
+          documento: document.getElementById("documento").value.trim(),
+          telefone: document.getElementById("telefone").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          endereco: document.getElementById("endereco").value.trim()
+        };
+
+        const documento = dados.documento.replace(/\D/g, "");
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email);
+        const fornecedores = lerDados(CHAVE_FORNECEDORES);
+
+        if (!dados.nome || !dados.documento || !dados.telefone) {
+          mensagemFornecedor("Preencha os campos obrigatórios.");
+          return;
+        }
+
+        if (documento.length !== 11 && documento.length !== 14) {
+          mensagemFornecedor("CPF ou CNPJ inválido.");
+          return;
+        }
+
+        if (!emailValido) {
+          mensagemFornecedor("E-mail inválido.");
+          return;
+        }
+
+        if (fornecedores.some(f =>
+          f.documento.replace(/\D/g, "") === documento
+        )) {
+          mensagemFornecedor("Fornecedor já cadastrado.");
+          return;
+        }
+
+        fornecedores.push({
+          id: Date.now().toString(),
+          ...dados,
+          dataCadastro: new Date().toISOString()
+        });
+
+        salvarDados(CHAVE_FORNECEDORES, fornecedores);
+        this.reset();
+        mensagemFornecedor("Fornecedor cadastrado com sucesso!");
+        listarFornecedores();
+        atualizarPainel();
+      });
+
+    function mensagemFornecedor(texto) {
+      document.getElementById("mensagem-fornecedor").textContent = texto;
+    }
+
+    function excluirFornecedor(id) {
+      const fornecedores = lerDados(CHAVE_FORNECEDORES)
+        .filter(f => f.id !== id);
+
+      salvarDados(CHAVE_FORNECEDORES, fornecedores);
+      listarFornecedores();
+      atualizarPainel();
+    }
+
+    function listarEstoque() {
+      const estoque = lerDados(CHAVE_ESTOQUE);
+      document.getElementById("lista-estoque").innerHTML =
+        estoque.map(item => `
+          <tr>
+            <td>${textoSeguro(item.nome)}</td>
+            <td>${Number(item.quantidade)}</td>
+          </tr>
+        `).join("");
+    }
+
+    function movimentarEstoque(tipo) {
+      const produto = document.getElementById("produto")
+        .value.trim();
+      const quantidade = Number(
+        document.getElementById("quantidade").value
+      );
+      const mensagem = document.getElementById("mensagem-estoque");
+
+      if (!produto || !Number.isInteger(quantidade) || quantidade <= 0) {
+        mensagem.textContent = "Informe um produto e uma quantidade válida.";
+        return;
+      }
+
+      const estoque = lerDados(CHAVE_ESTOQUE);
+      const item = estoque.find(p =>
+        p.nome.toLowerCase() === produto.toLowerCase()
+      );
+
+      if (tipo === "saida" && (!item || item.quantidade < quantidade)) {
+        mensagem.textContent = "Estoque insuficiente!";
+        return;
+      }
+
+      if (item) {
+        item.quantidade += tipo === "entrada" ? quantidade : -quantidade;
+      } else {
+        estoque.push({ nome: produto, quantidade });
+      }
+
+      salvarDados(CHAVE_ESTOQUE, estoque);
+      document.getElementById("form-estoque").reset();
+
+      mensagem.textContent = tipo === "entrada"
+        ? "Entrada registrada com sucesso!"
+        : "Saída registrada com sucesso!";
+
+      listarEstoque();
+      atualizarPainel();
+    }
+
+    document.getElementById("entrada").addEventListener("click", () => {
+      movimentarEstoque("entrada");
+    });
+
+    document.getElementById("saida").addEventListener("click", () => {
+      movimentarEstoque("saida");
+    });
+
+    function atualizarPainel() {
+      const fornecedores = lerDados(CHAVE_FORNECEDORES);
+      const estoque = lerDados(CHAVE_ESTOQUE);
+
+      document.getElementById("total-fornecedores").textContent =
+        fornecedores.length;
+
+      document.getElementById("total-produtos").textContent =
+        estoque.length;
+
+      document.getElementById("total-itens").textContent =
+        estoque.reduce((total, item) => total + Number(item.quantidade), 0);
+    }
+
+    listarFornecedores();
+    listarEstoque();
+    atualizarPainel();
+  </script>
 </body>
 </html>
+
